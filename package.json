@@ -1,0 +1,11 @@
+{
+  "name": "simple-webserver",
+  "version": "1.0.0",
+  "description": "A simple Node.js web server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Ian Yulianto",
+  "license": "MIT"
+}
