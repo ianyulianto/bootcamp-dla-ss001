@@ -1,0 +1,44 @@
+name: Node.js CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Docker image
+        run: docker build -t simple-node-webserver:latest .
+
+      - name: Run Docker container for testing
+        run: |
+          docker run -d -p 3000:3000 --name test-webserver simple-node-webserver:latest
+          sleep 5
+          curl --retry 5 --retry-connrefused http://localhost:3000
+
+      - name: Stop and remove container
+        if: always()
+        run: docker rm -f test-webserver
+
+      - name: Tag the existing image
+        run: docker tag simple-node-webserver:latest ianyulianto/bootcamp-dla-ss001:week2
+
+      - name: Push Docker image to Docker Hub
+        run: docker push ianyulianto/bootcamp-dla-ss001:week2
