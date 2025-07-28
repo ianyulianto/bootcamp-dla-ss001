@@ -40,5 +40,11 @@ jobs:
       - name: Tag the existing image
         run: docker tag simple-node-webserver:latest ianyulianto/bootcamp-dla-ss001:week2
 
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Push Docker image to Docker Hub
         run: docker push ianyulianto/bootcamp-dla-ss001:week2
